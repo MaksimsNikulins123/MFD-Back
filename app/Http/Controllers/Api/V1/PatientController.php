@@ -21,7 +21,7 @@ class PatientController extends Controller
         // return PatientMainInfoResource::collection(Patient_Main_Info::with('patientNoseInfo', 'patientMouthInfo')->get());
         return PatientMainInfoResource::collection(Patient_Main_Info::all());
     }
-   
+   // new one
     /**
      * Store a newly created resource in storage.
      *
