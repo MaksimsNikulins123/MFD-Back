@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-// use App\Http\Controllers\Api\PatientController;
+use App\Http\Controllers\Api\V1\PatientController;
 // use App\Http\Controllers\Api\PatientListController;
 use App\Models\Patient;
 
@@ -10,10 +10,26 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
    return $request->user();
 });
 
-Route::apiResources([
-   'patients' => PatientController::class
-]);
-// Route::get('/patients', [PatientController::class, 'index'] );
+// Route::apiResources([
+//    'patients' => PatientController::class
+// ]);
+
+
+// Route::get(
+//    '/patients/', 
+//    [PatientController::class, 'index']
+// );
+// Route::post(
+//    '/patients/{id}', 
+//    [PatientController::class, 'show']
+// );
+Route::post('/patients/find', 
+// function ($id){
+   [PatientController::class, 'find']
+   // return $request;
+   // return $id;
+   // }
+);
 // Route::get('/patients/{id}', [PatientController::class, 'show'] );
 // Route::get('/patients', [PatientListController::class, 'index'] );
 

@@ -18,8 +18,13 @@ class PatientController extends Controller
      */
     public function index()
     {
-        // return PatientMainInfoResource::collection(Patient_Main_Info::with('patientNoseInfo', 'patientMouthInfo')->get());
-        return PatientMainInfoResource::collection(Patient_Main_Info::all());
+        $patients = PatientMainInfoResource::collection(Patient_Main_Info::all());// return PatientMainInfoResource::collection(Patient_Main_Info::with('patientNoseInfo', 'patientMouthInfo')->get());
+        // $object = $patients->data;
+        // return $object;
+        return count($patients) ;
+        // $array_lenght = strlen( $patients->data);
+        // return $array_lenght;
+        // return PatientMainInfoResource::collection(Patient_Main_Info::all());
     }
    // new one
     /**
@@ -45,10 +50,79 @@ class PatientController extends Controller
     // public function show($id)
     public function show(Patient_Main_Info $patient)
     {
-        
-        // return new PatientMainInfoResource(Patient_Main_Info::findOrFail($id));
-        return new PatientMainInfoResource($patient);
+        // $code = $patient;
+        // $code = $patient;
+        $response = 'show patients';
+        // return new PatientMainInfoResource(Patient_Main_Info::findOrFail($patient));
+        // return PatientMainInfoResource::collection(Patient_Main_Info::with('patientNoseInfo', 'patientMouthInfo')->get($id));
+        // return new PatientMainInfoResource($patient);
+        // return $patient;
        
+    }
+    public function find(Request $request)
+    {
+     
+        $search_value = $request->personal_code;
+        $search_lenght = strlen($search_value);
+        $page_number = $request->page_number;
+        $users_count_on_page = $request->users_count_on_page;
+
+        $patients = PatientMainInfoResource::collection(Patient_Main_Info::all());
+        $found_users = [];
+        $found_users_count = 0;
+
+        // $users_array_for_pagination = array_chunk($patients, $users_count_on_page);
+        // for ($i=0; $i < 5; $i++) { 
+
+        //     if(str_starts_with($patients[i]->personal_code, $search_value))
+        //     {
+            
+        //         array_push($personal_codes, $patients[i]);
+        //     }
+        //     continue;
+        // }
+
+        foreach ($patients as $patient)
+        {
+            if(str_starts_with($patient->personal_code, $search_value))
+            {
+                // if(count($personal_codes) <= 4)
+                // {
+                    array_push($found_users, $patient);
+                    $found_users_count++;
+                // }
+                // else
+                // {
+                //     $total_count++;
+                // }
+            }
+            continue;
+            
+        }
+
+        if(count($found_users) > 0)
+        {
+            $users_array_for_pagination = array_chunk($found_users, $users_count_on_page);
+            $current_part_of_users_array_for_pagination = $users_array_for_pagination[$page_number-1];
+        }
+        else
+        {
+            $current_part_of_users_array_for_pagination = [];
+            // $found_users_count++;
+        }
+       
+
+        $response = (object) [
+            // 'data' => $found_users,
+            // 'data' => $users_array_for_pagination,
+            'data' => $current_part_of_users_array_for_pagination,
+            // 'data' => $patients,
+            'foundUsersCount' => $found_users_count 
+          ];
+        
+        // $response = $patients[0]->personal_code;
+        
+        return $response; 
     }
 
     /**
